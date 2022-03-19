@@ -1,9 +1,21 @@
 {
   "version": "1.0.0",
   "io": {
-    "USER_LED": {
+    "D1": {
       "type": "GPIO",
-      "port": 33,
+      "port": 32,
+      "dir": "output",
+      "pull": "pulldown"
+    },
+    "D2": {
+      "type": "GPIO",
+      "port": 31,
+      "dir": "output",
+      "pull": "pulldown"
+    },
+    "D3": {
+      "type": "GPIO",
+      "port": 3,
       "dir": "output",
       "pull": "pulldown"
     },

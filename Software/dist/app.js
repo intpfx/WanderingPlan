@@ -938,8 +938,23 @@ version: 1.0.0
 
 /****************************************加载依赖模块结束*******************************************************/
 
+/****************************************公共函数模块开始*******************************************************/
+//定义函数 [数组转字符串]
+
+function ArrayToString(fileData) {
+  var dataString = "";
+
+  for (var i = 0; i < fileData.length; i++) {
+    dataString += String.fromCharCode(fileData[i]);
+  }
+
+  return dataString;
+}
+/****************************************公共函数模块结束*******************************************************/
+
 /****************************************温度传感模块开始*******************************************************/
 //初始化板上LM75A温度传感器
+
 
 var lm75 = i2c__default['default'].open({
   id: "I2C1"
@@ -965,19 +980,25 @@ function lm75tmpGet() {
 /****************************************温度传感模块结束*******************************************************/
 
 /****************************************人体检测模块开始*******************************************************/
-//初始化板上LED灯数据[发送]io口
+//初始化LED灯数据[发送]io口
 
 
-var led = gpio__default['default'].open({
-  id: "USER_LED"
+var ledBlue = gpio__default['default'].open({
+  id: "D2"
+});
+var ledGreen = gpio__default['default'].open({
+  id: "D3"
 }); // 初始化人体检测传感器数据[接收]io口
 
 var sensor = gpio__default['default'].open({
   id: "D4"
 }); //初始化LED灯状态值
 
-var value = 0;
-var last_value = 0;
+var sensorValue = 0;
+var blueValue = 1;
+var greenValue = 1;
+ledBlue.writeValue(blueValue);
+ledGreen.writeValue(greenValue);
 /****************************************人体检测模块结束*******************************************************/
 
 /****************************************GPS模块开始*******************************************************/
@@ -1008,22 +1029,11 @@ uart1.on("data", function (data) {
   var bbb = aaa.split("$");
   GGA = "$" + bbb[1];
   gnss.update(GGA);
-}); //定义函数 [数组转字符串]
-
-function ArrayToString(fileData) {
-  var dataString = "";
-
-  for (var i = 0; i < fileData.length; i++) {
-    dataString += String.fromCharCode(fileData[i]);
-  }
-
-  return dataString;
-}
+});
 /****************************************GPS模块结束*******************************************************/
 
 /****************************************摄像头模块开始*******************************************************/
 //打开并初始化UART2
-
 
 var uart2 = uart__default['default'].open({
   id: "UART2"
@@ -1038,8 +1048,8 @@ function writeAndRead() {
   uart2.write(commandData); //摄像头指令读取
 
   uart2.on("data", function (data) {
-    var aaa = ArrayToString(data);
-    console.log(aaa);
+    photoData = ArrayToString(data);
+    console.log(photoData);
   });
 } //定义函数 [拍照]
 
@@ -1060,11 +1070,7 @@ function readlenth() {
 
 function readnum() {
   commandData = [0x56, 0x00, 0x32, 0x0c, 0x00, 0x0a, 0x00, 0x00, 0x00, 0x00, 0x00, 0x01, 0x4b, 0xc6, 0x00, 0xff];
-  uart2.write(commandData);
-  uart2.on("data", function (data) {
-    photoData = ArrayToString(data);
-    console.log(photoData);
-  });
+  writeAndRead();
   console.log("readnum");
 } //定义函数 [停止拍照]
 
@@ -1086,10 +1092,15 @@ function takephoto() {
 /****************************************摄像头模块结束*******************************************************/
 
 /****************************************磁力锁模块开始*******************************************************/
-//初始化磁力锁上电状态
+//初始化MOS模块[发送]io口
 
 
-var lock;
+var sig = gpio__default['default'].open({
+  id: "D1"
+}); //初始化磁力锁上电状态
+
+var sigValue = 1;
+sig.writeValue(sigValue);
 /****************************************磁力锁模块结束*******************************************************/
 
 /****************************************业务逻辑编写开始*******************************************************/
@@ -1106,6 +1117,27 @@ function uploadData(iotdev) {
   iotdev.onProps(function (properity) {
     console.log("received cloud properity param " + properity.params);
     console.log("received cloud properity param len " + properity.params_len);
+    var payload = JSON.parse(properity.params); //收到磁力锁的控制信息 执行指令 并上报状态
+
+    if (payload.LockSwitch !== undefined) {
+      sigValue = parseInt(payload.LockSwitch);
+      sig.writeValue(sigValue);
+      iotdev.postProps(JSON.stringify({
+        LockSwitch: sigValue
+      }));
+    } //收到LED灯的控制信息 执行指令 并上报状态
+
+
+    if (payload.Blue !== undefined || payload.Green !== undefined) {
+      blueValue = parseInt(payload.Blue);
+      greenValue = parseInt(payload.Green);
+      ledBlue.writeValue(blueValue);
+      ledGreen.writeValue(greenValue);
+      iotdev.postProps(JSON.stringify({
+        Blue: blueValue,
+        Green: greenValue
+      }));
+    }
   }); // 定时检测 将数据保存到iotdev
 
   setInterval(function () {
@@ -1116,20 +1148,27 @@ function uploadData(iotdev) {
     temperature = lm75tmpGet();
     console.log("temperature: " + temperature); //更新LED灯状态值
 
-    value = sensor.readValue();
+    sensorValue = sensor.readValue();
 
-    if (value != last_value) {
-      led.writeValue(value);
-      console.log("gpio: led set value " + value); //更新图片数据
+    if (sensorValue == 1) {
+      blueValue = 0;
+      greenValue = 1;
+      ledBlue.writeValue(blueValue);
+      ledGreen.writeValue(greenValue);
+      console.log("someone is coming!"); //更新图片数据
 
       takephoto();
       console.log("photodata=" + photoData);
-      last_value = value;
+    } else {
+      blueValue = 1;
+      greenValue = 1;
+      ledBlue.writeValue(blueValue);
+      ledGreen.writeValue(greenValue);
     } //将数据保存到iotdev
 
 
     iotdev.postProps(JSON.stringify({
-      LEDSwitch: value,
+      PIR: sensorValue,
       ImgHex: photoData,
       CurrentTemperature: temperature,
       GeoLocation: {
@@ -1138,7 +1177,9 @@ function uploadData(iotdev) {
         Altitude: geoLocation_data["alt"],
         CoordinateSystem: 1
       },
-      LockSwitch: lock
+      LockSwitch: sigValue,
+      Blue: blueValue,
+      Green: greenValue
     }));
   }, 5000);
 } //函数定义 [创建物联网设备]
