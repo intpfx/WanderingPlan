@@ -52,5 +52,6 @@
       "devAddr": 72
     }
   },
-  "debugLevel": "DEBUG"
+  "debugLevel": "DEBUG",
+  "repl": "disable"
 }
