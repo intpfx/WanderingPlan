@@ -14,15 +14,14 @@
 + ...
 ### 第三阶段[拓展至货柜阶段]
 + ...
-
+---
 ## 业务逻辑流程图
 <img src="Docs/CASE业务逻辑流程图.png">
 
+---
+
 ## API使用示例[仅提供NodeJS版]
----
-> 项目AppKey：33541419
-> 项目AppSecret：f2cb71bf2b1741459ba50bd0d36e2562
----
+
 + API名称：setLED
 ```javascript
 const Client = require('aliyun-api-gateway').Client;
@@ -161,7 +160,6 @@ Gateway(params)
 
 ```
 ---
----
 + API名称：getLockValue
 ```javascript
 const Client = require('aliyun-api-gateway').Client;
@@ -206,7 +204,6 @@ Gateway(params)
     .catch(res => console.log(res));
 
 ```
----
 ---
 + API名称：getGreenValue
 ```javascript
@@ -253,7 +250,6 @@ Gateway(params)
 
 ```
 ---
----
 + API名称：getBlueValue
 ```javascript
 const Client = require('aliyun-api-gateway').Client;
@@ -299,7 +295,6 @@ Gateway(params)
 
 ```
 ---
----
 + API名称：getLocation
 ```javascript
 const Client = require('aliyun-api-gateway').Client;
@@ -344,7 +339,6 @@ Gateway(params)
     .catch(res => console.log(res));
 
 ```
----
 ---
 + API名称：getTemp
 ```javascript
