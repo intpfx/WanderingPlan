@@ -176,25 +176,27 @@ function uploadData(iotdev) {
     console.log("received cloud properity param len " + properity.params_len);
     var payload = JSON.parse(properity.params);
     //收到磁力锁的控制信息 执行指令 并上报状态
-    if(payload.LockSwitch !== undefined)
-    {
+    if (payload.LockSwitch !== undefined) {
       sigValue = parseInt(payload.LockSwitch);
       sig.writeValue(sigValue);
-      iotdev.postProps(JSON.stringify({
-        LockSwitch: sigValue,
-      }));
+      iotdev.postProps(
+        JSON.stringify({
+          LockSwitch: sigValue,
+        })
+      );
     }
     //收到LED灯的控制信息 执行指令 并上报状态
-    if(payload.Blue !== undefined || payload.Green !== undefined)
-    {
+    if (payload.Blue !== undefined || payload.Green !== undefined) {
       blueValue = parseInt(payload.Blue);
       greenValue = parseInt(payload.Green);
       ledBlue.writeValue(blueValue);
       ledGreen.writeValue(greenValue);
-      iotdev.postProps(JSON.stringify({
-        Blue: blueValue,
-        Green: greenValue,
-      }));
+      iotdev.postProps(
+        JSON.stringify({
+          Blue: blueValue,
+          Green: greenValue,
+        })
+      );
     }
   });
   // 定时检测 将数据保存到iotdev
@@ -212,7 +214,7 @@ function uploadData(iotdev) {
     //更新温度数据
     temperature = lm75tmpGet();
     console.log("temperature: " + temperature);
-    //更新LED灯状态值
+    //更新LED灯状态值及图片数据
     sensorValue = sensor.readValue();
     if (sensorValue == 1) {
       blueValue = 0;
@@ -220,10 +222,9 @@ function uploadData(iotdev) {
       ledBlue.writeValue(blueValue);
       ledGreen.writeValue(greenValue);
       console.log("someone is coming!");
-      //更新图片数据
       takephoto();
       console.log("photodata=" + photoData);
-    }else{
+    } else {
       blueValue = 1;
       greenValue = 1;
       ledBlue.writeValue(blueValue);
@@ -244,12 +245,10 @@ function uploadData(iotdev) {
         LockSwitch: sigValue,
         Blue: blueValue,
         Green: greenValue,
-
       })
     );
   }, 5000);
 }
-
 //函数定义 [创建物联网设备]
 function iotDeviceCreate() {
   //初始化设备三元组
