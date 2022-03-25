@@ -5,7 +5,7 @@
       "type": "GPIO",
       "port": 32,
       "dir": "output",
-      "pull": "pulldown"
+      "pull": "pullup"
     },
     "D2": {
       "type": "GPIO",

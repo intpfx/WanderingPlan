@@ -2,9 +2,9 @@
 ---
 ## 日志 | Logs
 >2022 03 25 
->>所有工程文件都已上传至Github
->>API文档已更新
->>代码注释已更新
+>> + 所有工程文件都已上传至Github
+>> + API文档已更新
+>> + 代码注释已更新
 
 >2022 03 24 
 >>磁力锁模块开发成功上线
@@ -59,7 +59,7 @@
 >2021 12 30 
 >>项目正式立项
 ---
-## 渲染图
+## 产品渲染图
 <img src="Docs/渲染图.jpg">
 
 ---
@@ -81,8 +81,19 @@
 
 ---
 
-## API使用示例[仅提供NodeJS版]
-
+## API文档[仅提供NodeJS版]
+---
+|API名称|备注|
+|:-:|:-:|
+|setLED|设置LED灯的颜色|
+|setLock|设置磁力锁的状态|
+|getPIR|获取PIR值|
+|getLockValue|获取磁力锁当前状态|
+|getGreenValue|获取绿灯当前状态|
+|getBlueValue|获取蓝灯当前状态|
+|getLocation|获取当前设备位置|
+|getTemp|获取当前设备温度|
+---
 + API名称：setLED
 ```javascript
 const Client = require('aliyun-api-gateway').Client;
