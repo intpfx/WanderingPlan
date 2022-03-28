@@ -1,13 +1,16 @@
 # 流浪计划 | WanderingPlan
 ---
 ## 日志 | Logs
+>2022 03 28
+>> + API文档更新
+
 >2022 03 27
 >> + 磁力锁模块开发上线成功
 
 >2022 03 25 
 >> + 所有工程文件都已上传至Github
->> + API文档已更新
->> + 代码注释已更新
+>> + API文档更新
+>> + 代码注释更新
 >> + 购买升压模块
 
 >2022 03 24 
@@ -91,16 +94,31 @@
 
 ## API文档[仅提供NodeJS版]
 ---
-|API名称|备注|
-|:-:|:-:|
-|setLED|设置LED灯的颜色|
-|setLock|设置磁力锁的状态|
-|getPIR|获取PIR值|
-|getLockValue|获取磁力锁当前状态|
-|getGreenValue|获取绿灯当前状态|
-|getBlueValue|获取蓝灯当前状态|
-|getLocation|获取当前设备位置|
-|getTemp|获取当前设备温度|
+|API名称|备注|入参名称|入参类型|入参默认值|返回类型|
+|:-:|:-:|:-:|:-:|:-:|:-:|
+|getPIR|获取当前PIR值|action|String|node_730b6dc0|bool|
+|getLockValue|获取磁力锁当前状态|action|String|node_2b9116c0|bool|
+|getGreenValue|获取绿灯当前状态|action|String|node_d0e0d760|bool|
+|getBlueValue|获取蓝灯当前状态|action|String|node_93cbe5f0|bool|
+|getLocation|获取当前设备位置|action|String|node_fee4b250|struct|
+|getTemp|获取当前设备温度|action|String|node_af145fb0|double|
+---
+|API名称|备注|入参名称1|入参类型1|入参默认值1|入参名称2|入参类型2|入参默认值2|入参名称3|入参类型3|入参默认值3|返回类型|
+|:-:|:-:|:-:|:-:|:-:|:-:|:-:|:-:|:-:|:-:|:-:|:-:|
+|setLED|设置LED灯的颜色|action|String|node_bb4914c0|green|Num|1|blue|Num|1|
+|setLock|设置磁力锁的状态|action|String|node_e9ae6510|data|Num|1|None|None|None|
+---
+|返回码数字|返回信息|来源|描述|
+|:-:|:-:|:-:|:-:|
+200|success|系统|成功|
+400|request error.|系统|请求错误|
+401|request auth error.|系统|请求认证错误|
+403|request forbidden.|系统|请求被禁止|
+404|service not found.|系统|服务未找到|
+429|too many requests.|系统|太多请求|
+460|request parameter error.|系统|请求参数错误|
+500|service error.|系统|服务端错误|
+503|service not available.|系统|服务不可用|
 ---
 ### API使用示例
 ---
