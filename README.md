@@ -105,8 +105,8 @@
 ---
 |API名称|备注|入参名称1|入参类型1|入参默认值1|入参名称2|入参类型2|入参默认值2|入参名称3|入参类型3|入参默认值3|返回类型|
 |:-:|:-:|:-:|:-:|:-:|:-:|:-:|:-:|:-:|:-:|:-:|:-:|
-|setLED|设置LED灯的颜色|action|String|node_bb4914c0|green|Num|1|blue|Num|1|
-|setLock|设置磁力锁的状态|action|String|node_e9ae6510|data|Num|1|None|None|None|
+|setLED|设置LED灯的颜色|action|String|node_bb4914c0|green|Num|1|blue|Num|1|None|
+|setLock|设置磁力锁的状态|action|String|node_e9ae6510|data|Num|1|None|None|None|None|
 ---
 |返回码数字|返回信息|来源|描述|
 |:-:|:-:|:-:|:-:|
