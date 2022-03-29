@@ -82,7 +82,7 @@
 + GPS模块 ✔
 + 磁力锁模块 ✔
 + 阿里云模块 ✔
-### 第二阶段[货柜阶段][功能拓展及硬件精简阶段]
+### 第二阶段[货柜阶段][功能拓展及降低成本阶段]
 + 摄像头模块
 + 太阳能电池模块
 + ...
@@ -489,3 +489,10 @@ Gateway(params)
     .catch(res => console.log(res));
 
 ```
+---
+## 鸣谢
+> + 本项目基于Alibaba的AliOS Things项目开发
+> + 感谢阿里云IoT生态合作伙伴在开发过程中对问题的答复
+> + 以下为AliOS Things项目地址：
+>> + https://github.com/peng-zhihui/ElectronBot
+---
